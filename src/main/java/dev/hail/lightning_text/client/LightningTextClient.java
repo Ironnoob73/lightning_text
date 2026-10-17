@@ -3,6 +3,7 @@ package dev.hail.lightning_text.client;
 import dev.hail.lightning_text.client.config.LTConfig;
 import dev.hail.lightning_text.client.font.SystemFontManager;
 import dev.hail.lightning_text.client.title.TitleManager;
+import dev.hail.lightning_text.client.track.BossTracker;
 import dev.hail.lightning_text.client.track.WorldTracker;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
@@ -29,5 +30,6 @@ public final class LightningTextClient {
         // Game bus listeners (client ticks).
         NeoForge.EVENT_BUS.addListener(TitleManager::onClientTick);
         NeoForge.EVENT_BUS.addListener(WorldTracker::onClientTick);
+        NeoForge.EVENT_BUS.addListener(BossTracker::onClientTick);
     }
 }

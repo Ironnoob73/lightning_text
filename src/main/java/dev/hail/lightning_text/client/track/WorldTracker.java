@@ -1,10 +1,9 @@
 package dev.hail.lightning_text.client.track;
 
 import dev.hail.lightning_text.client.config.LTConfig;
+import dev.hail.lightning_text.client.store.VisitedStore;
 import dev.hail.lightning_text.client.title.TitleManager;
 import dev.hail.lightning_text.client.title.TitleTexts;
-import java.util.HashSet;
-import java.util.Set;
 import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -22,6 +21,8 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
  * Watches the client world for "a new day started" and "a biome was entered for the first time".
  * Entirely client side: it only reads the synced day time and the biome holder at the player's
  * position, nothing is ever sent to the server.
+ *
+ * <p>The set of already visited biomes is persisted per world / server by {@link VisitedStore}.
  */
 public final class WorldTracker {
     private static final long TICKS_PER_DAY = 24000L;
@@ -34,7 +35,6 @@ public final class WorldTracker {
     @Nullable
     private static ResourceLocation pendingBiome;
     private static int pendingTicks;
-    private static final Set<ResourceLocation> VISITED_BIOMES = new HashSet<>();
 
     private WorldTracker() {
     }
@@ -50,18 +50,20 @@ public final class WorldTracker {
             return;
         }
         if (level != lastLevel) {
-            onLevelChanged(level);
+            onLevelChanged(minecraft, level);
         }
         tickDay(level);
         tickBiome(level, player);
     }
 
-    private static void onLevelChanged(ClientLevel level) {
+    private static void onLevelChanged(Minecraft minecraft, ClientLevel level) {
         lastLevel = level;
         lastDay = dayOf(level);
         lastBiome = null;
         pendingBiome = null;
         pendingTicks = 0;
+        // The key stays the same when only the dimension changed, so nothing is reloaded then.
+        VisitedStore.open(minecraft);
     }
 
     private static void reset() {
@@ -70,7 +72,7 @@ public final class WorldTracker {
         lastBiome = null;
         pendingBiome = null;
         pendingTicks = 0;
-        VISITED_BIOMES.clear();
+        VisitedStore.close();
         TitleManager.clear();
     }
 
@@ -114,7 +116,11 @@ public final class WorldTracker {
             return;
         }
         pendingBiome = null;
-        if (!VISITED_BIOMES.add(biome)) {
+        if (!LTConfig.biomeTitleEnabled()) {
+            // Disabled features record nothing, so enabling them later still works.
+            return;
+        }
+        if (!VisitedStore.markBiome(biome)) {
             return;
         }
         TitleManager.showBiome(TitleTexts.biomeName(biome), TitleTexts.galactic(biome.toString()));

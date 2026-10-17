@@ -17,8 +17,15 @@ public final class LTConfig {
             .comment("Show the big banner the first time the player enters a biome.")
             .define("enableBiomeTitle", true);
 
+    public static final ModConfigSpec.BooleanValue ENABLE_BOSS_TITLE = BUILDER
+            .comment("Show the big banner the first time the player sees a boss type mob.",
+                    "Seeing means the mob is on screen and not hidden behind blocks; no attack is needed.",
+                    "Boss types: ender dragon, wither, anything in the c:bosses entity type tag,",
+                    "plus the warden, the elder guardian and the chicken jockey.")
+            .define("enableBossTitle", true);
+
     public static final ModConfigSpec.BooleanValue ENABLE_TITLE_SOUND = BUILDER
-            .comment("Play minecraft:entity.lightning_bolt.thunder (pitch 0) when a day or biome banner appears.",
+            .comment("Play minecraft:entity.lightning_bolt.thunder (pitch 0) when a day, biome or boss banner appears.",
                     "Command titles never play a sound.")
             .define("enableTitleSound", true);
 
@@ -50,6 +57,10 @@ public final class LTConfig {
         return read(() -> ENABLE_BIOME_TITLE.get(), true);
     }
 
+    public static boolean bossTitleEnabled() {
+        return read(() -> ENABLE_BOSS_TITLE.get(), true);
+    }
+
     public static boolean titleSoundEnabled() {
         return read(() -> ENABLE_TITLE_SOUND.get(), true);
     }
@@ -59,7 +70,7 @@ public final class LTConfig {
     }
 
     public static double titleScale() {
-        return read(() -> TITLE_SCALE.get(), 1.0D);
+        return read(() -> TITLE_SCALE.get(), 2.5D);
     }
 
     public static int biomeDetectDelay() {

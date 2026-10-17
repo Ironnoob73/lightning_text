@@ -27,13 +27,14 @@ public final class TitleManager {
     public enum Kind {
         COMMAND,
         DAY,
-        BIOME
+        BIOME,
+        BOSS
     }
 
     public enum SubtitleStyle {
         /** Rendered with the system font (day clock, command subtitles). */
         SYSTEM,
-        /** Rendered with the vanilla "Standard Galactic Alphabet" font (biome registry names). */
+        /** Rendered with the vanilla "Standard Galactic Alphabet" font (registry names). */
         GALACTIC
     }
 
@@ -236,6 +237,14 @@ public final class TitleManager {
             return;
         }
         enqueue(new Entry(biomeName, galacticName, SubtitleStyle.GALACTIC, 0, DEFAULT_STAY_TICKS, 0, Kind.BIOME));
+    }
+
+    /** First fight against a boss type mob; same layout as the biome banner. */
+    public static void showBoss(Component bossName, Component galacticName) {
+        if (!LTConfig.bossTitleEnabled()) {
+            return;
+        }
+        enqueue(new Entry(bossName, galacticName, SubtitleStyle.GALACTIC, 0, DEFAULT_STAY_TICKS, 0, Kind.BOSS));
     }
 
     private static void enqueue(Entry entry) {

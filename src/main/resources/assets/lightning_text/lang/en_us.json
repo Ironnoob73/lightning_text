@@ -11,6 +11,8 @@
   "lightning_text.day.10": "DAY 10",
   "lightning_text.day": "DAY %s",
 
+  "lightning_text.boss.chicken_jockey": "Chicken Jockey",
+
   "lightning_text.configuration.title": "Lightning Text",
   "lightning_text.configuration.section.lightning.text.client.toml": "Lightning Text",
   "lightning_text.configuration.section.lightning.text.client.toml.title": "Lightning Text",
@@ -18,8 +20,10 @@
   "lightning_text.configuration.enableDayTitle.tooltip": "Show a big banner whenever a new in-game day begins (also when sleeping).",
   "lightning_text.configuration.enableBiomeTitle": "Biome banners",
   "lightning_text.configuration.enableBiomeTitle.tooltip": "Show a big banner the first time you enter a biome.",
+  "lightning_text.configuration.enableBossTitle": "Boss banners",
+  "lightning_text.configuration.enableBossTitle.tooltip": "Show a big banner the first time you see a boss (no attack needed; ender dragon, wither, c:bosses tag, warden, elder guardian, chicken jockey).",
   "lightning_text.configuration.enableTitleSound": "Thunder sound",
-  "lightning_text.configuration.enableTitleSound.tooltip": "Play entity.lightning_bolt.thunder (pitch 0) together with day and biome banners.",
+  "lightning_text.configuration.enableTitleSound.tooltip": "Play entity.lightning_bolt.thunder (pitch 0) together with day, biome and boss banners.",
   "lightning_text.configuration.fontPath": "Font file",
   "lightning_text.configuration.fontPath.tooltip": "TrueType font used for the banners. Empty = auto-detect SimHei / a system CJK font.",
   "lightning_text.configuration.titleScale": "Title scale",
