@@ -104,7 +104,7 @@ public final class TitleRenderer {
         } else if (main != null) {
             drawSystemSubtitle(graphics, subtitle, width, subtitleCenterY, oversample, color, shadowColor, main);
         } else {
-            drawVanillaScaled(graphics, vanillaFont, subtitle, width * 0.5F, subtitleCenterY, 2.0F, color);
+            drawVanillaScaled(graphics, vanillaFont, subtitle, width * 0.5F, subtitleCenterY, 1.0F, color);
         }
     }
 
@@ -148,26 +148,26 @@ public final class TitleRenderer {
         int x = Math.round((screenWidth - layout.width()) * 0.5F);
         int yOffset = Math.round(y);
         int shadowOffset = Math.max(1, Math.round(layout.size() * 0.05F));
-        drawSpaced(graphics, font.font(), layout.text(), x + shadowOffset, yOffset + shadowOffset, shadowColor,
-                layout.spacing());
+        //drawSpaced(graphics, font.font(), layout.text(), x + shadowOffset, yOffset + shadowOffset, shadowColor,
+        //        layout.spacing());
         drawSpaced(graphics, font.font(), layout.text(), x, yOffset, color, layout.spacing());
     }
 
     private static void drawSystemSubtitle(GuiGraphics graphics, Component text, int screenWidth, float centerY,
             int oversample, int color, int shadowColor, MainLayout main) {
         FormattedCharSequence sequence = text.getVisualOrderText();
-        SystemFont font = SystemFontManager.get(quantise(Math.max(12.0F, main.size() * 0.42F)), oversample);
+        SystemFont font = SystemFontManager.get(quantise(Math.max(12.0F, main.size() * 0.1F)), oversample);
         if (font == null) {
-            drawVanillaScaled(graphics, Minecraft.getInstance().font, text, screenWidth * 0.5F, centerY, 2.0F, color);
+            drawVanillaScaled(graphics, Minecraft.getInstance().font, text, screenWidth * 0.5F, centerY, 1.0F, color);
             return;
         }
-        float spacing = font.pixelSize() * 0.06F;
+        float spacing = font.pixelSize() * 0.01F;
         float width = measure(font.font(), sequence, spacing);
         float y = centerY - BASELINE + (font.ascender() + font.descender()) * 0.5F;
         int x = Math.round((screenWidth - width) * 0.5F);
         int yOffset = Math.round(y);
         int shadowOffset = Math.max(1, Math.round(font.pixelSize() * 0.05F));
-        drawSpaced(graphics, font.font(), sequence, x + shadowOffset, yOffset + shadowOffset, shadowColor, spacing);
+        //drawSpaced(graphics, font.font(), sequence, x + shadowOffset, yOffset + shadowOffset, shadowColor, spacing);
         drawSpaced(graphics, font.font(), sequence, x, yOffset, color, spacing);
     }
 
@@ -177,7 +177,7 @@ public final class TitleRenderer {
         float mainSize = main != null ? main.size() : REFERENCE_SIZE;
         // Snap to half steps so that the 8px glyphs stay evenly scaled instead of getting blurred
         // unevenly by a fractional factor.
-        float scale = Math.max(1.0F, Math.round(mainSize * SGA_SIZE_FACTOR / VANILLA_GLYPH_HEIGHT * 2.0F) / 2.0F);
+        float scale = Math.max(1.0F, Math.round(mainSize * SGA_SIZE_FACTOR / VANILLA_GLYPH_HEIGHT * 2.0F) / 8.0F);
         int textWidth = vanillaFont.width(text);
         if (textWidth > 0 && textWidth * scale > maxWidth) {
             scale = maxWidth / textWidth;
@@ -186,7 +186,7 @@ public final class TitleRenderer {
         pose.pushPose();
         pose.translate((screenWidth - textWidth * scale) * 0.5F, centerY - 4.0F * scale, 0.0F);
         pose.scale(scale, scale, 1.0F);
-        graphics.drawString(vanillaFont, text, 0, 0, color, true);
+        graphics.drawString(vanillaFont, text, 0, 0, color, false);
         pose.popPose();
     }
 

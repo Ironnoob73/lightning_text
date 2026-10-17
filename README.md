@@ -1,6 +1,9 @@
+> ### 🐋 AI-generated content disclosure
+> This mod was generated almost entirely by AI, with only minimal human intervention.
+
 # Lightning Text
 
-纯客户端 NeoForge 模组：把原版 `/title` 的标题显示替换成《鸣潮》/《明日方舟：终末地》进入新地区时的那种大标题，
+纯客户端 NeoForge 模组：把原版 `/title` 的标题显示替换成《控制》/《明日方舟：终末地》进入新地区时的那种大标题，
 并额外提供「天数」与「首次进入生物群系」两种大标题。
 
 A client-side NeoForge mod that replaces the vanilla `/title` output with oversized "new region" style banners,

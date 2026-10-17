@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 
 /**
  * Lightning Text - client only, replaces the vanilla {@code /title} display with the kind of
- * oversized region banners used by games such as Wuthering Waves or Arknights: Endfield, and adds
+ * oversized region banners used by games such as Control or Arknights: Endfield, and adds
  * day counter / first-time-biome banners.
  */
 @Mod(value = LightningText.MOD_ID, dist = Dist.CLIENT)

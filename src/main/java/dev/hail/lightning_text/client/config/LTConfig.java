@@ -30,7 +30,7 @@ public final class LTConfig {
     public static final ModConfigSpec.DoubleValue TITLE_SCALE = BUILDER
             .comment("Multiplier applied to the maximum banner size.",
                     "Banners still shrink automatically when the text would not fit on screen.")
-            .defineInRange("titleScale", 1.0D, 0.25D, 3.0D);
+            .defineInRange("titleScale", 2.5D, 0.25D, 3.0D);
 
     public static final ModConfigSpec.IntValue BIOME_DETECT_DELAY = BUILDER
             .comment("Ticks the player has to stay inside a biome before its banner is shown.",

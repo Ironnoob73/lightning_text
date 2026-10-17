@@ -11,9 +11,9 @@
   "lightning_text.day.10": "第十天",
   "lightning_text.day": "第%s天",
 
-  "lightning_text.configuration.title": "雷光字幕",
-  "lightning_text.configuration.section.lightning.text.client.toml": "雷光字幕",
-  "lightning_text.configuration.section.lightning.text.client.toml.title": "雷光字幕",
+  "lightning_text.configuration.title": "雷霆大字",
+  "lightning_text.configuration.section.lightning.text.client.toml": "雷霆大字",
+  "lightning_text.configuration.section.lightning.text.client.toml.title": "雷霆大字",
   "lightning_text.configuration.enableDayTitle": "天数标题",
   "lightning_text.configuration.enableDayTitle.tooltip": "进入新的一天时（睡觉跳过夜晚也算）显示大标题。",
   "lightning_text.configuration.enableBiomeTitle": "生物群系标题",
