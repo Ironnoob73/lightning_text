@@ -21,13 +21,15 @@
   "lightning_text.configuration.enableBiomeTitle": "生物群系标题",
   "lightning_text.configuration.enableBiomeTitle.tooltip": "第一次进入某个生物群系时显示大标题。",
   "lightning_text.configuration.enableBossTitle": "Boss 标题",
-  "lightning_text.configuration.enableBossTitle.tooltip": "第一次在屏幕上看到 Boss 类生物时显示大标题（无需攻击；末影龙、凋灵、c:bosses 标签内的生物，以及监守者、远古守卫者、鸡骑士）。",
-  "lightning_text.configuration.enableTitleSound": "雷声音效",
-  "lightning_text.configuration.enableTitleSound.tooltip": "显示天数、生物群系或 Boss 标题时播放 entity.lightning_bolt.thunder（声调 0）。",
+  "lightning_text.configuration.enableBossTitle.tooltip": "第一次在屏幕上看到 Boss 类生物时显示大标题（如末影龙、凋灵、c:bosses 标签内的生物，以及监守者、远古守卫者、鸡骑士）。",
+  "lightning_text.configuration.enableTitleSound": "雷霆音效",
+  "lightning_text.configuration.enableTitleSound.tooltip": "显示天数、生物群系或 Boss 标题时播放雷声。",
   "lightning_text.configuration.fontPath": "字体文件",
   "lightning_text.configuration.fontPath.tooltip": "标题使用的 TrueType 字体。留空则自动寻找黑体（SimHei）等系统字体。",
   "lightning_text.configuration.titleScale": "标题大小倍率",
   "lightning_text.configuration.titleScale.tooltip": "标题最大尺寸的倍率。",
+  "lightning_text.configuration.enableTitleShadow": "标题阴影",
+  "lightning_text.configuration.enableTitleShadow.tooltip": "是否显示文字阴影。",
   "lightning_text.configuration.biomeDetectDelay": "生物群系延迟",
   "lightning_text.configuration.biomeDetectDelay.tooltip": "进入生物群系后停留多少刻才显示标题。"
 }

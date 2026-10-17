@@ -148,8 +148,8 @@ public final class TitleRenderer {
         int x = Math.round((screenWidth - layout.width()) * 0.5F);
         int yOffset = Math.round(y);
         int shadowOffset = Math.max(1, Math.round(layout.size() * 0.05F));
-        //drawSpaced(graphics, font.font(), layout.text(), x + shadowOffset, yOffset + shadowOffset, shadowColor,
-        //        layout.spacing());
+        if (LTConfig.titleShadowEnabled())
+            drawSpaced(graphics, font.font(), layout.text(), x + shadowOffset, yOffset + shadowOffset, shadowColor, layout.spacing());
         drawSpaced(graphics, font.font(), layout.text(), x, yOffset, color, layout.spacing());
     }
 
@@ -167,7 +167,8 @@ public final class TitleRenderer {
         int x = Math.round((screenWidth - width) * 0.5F);
         int yOffset = Math.round(y);
         int shadowOffset = Math.max(1, Math.round(font.pixelSize() * 0.05F));
-        //drawSpaced(graphics, font.font(), sequence, x + shadowOffset, yOffset + shadowOffset, shadowColor, spacing);
+        if (LTConfig.titleShadowEnabled())
+            drawSpaced(graphics, font.font(), sequence, x + shadowOffset, yOffset + shadowOffset, shadowColor, spacing);
         drawSpaced(graphics, font.font(), sequence, x, yOffset, color, spacing);
     }
 
@@ -186,7 +187,7 @@ public final class TitleRenderer {
         pose.pushPose();
         pose.translate((screenWidth - textWidth * scale) * 0.5F, centerY - 4.0F * scale, 0.0F);
         pose.scale(scale, scale, 1.0F);
-        graphics.drawString(vanillaFont, text, 0, 0, color, false);
+        graphics.drawString(vanillaFont, text, 0, 0, color, LTConfig.titleShadowEnabled());
         pose.popPose();
     }
 

@@ -21,13 +21,15 @@
   "lightning_text.configuration.enableBiomeTitle": "Biome banners",
   "lightning_text.configuration.enableBiomeTitle.tooltip": "Show a big banner the first time you enter a biome.",
   "lightning_text.configuration.enableBossTitle": "Boss banners",
-  "lightning_text.configuration.enableBossTitle.tooltip": "Show a big banner the first time you see a boss (no attack needed; ender dragon, wither, c:bosses tag, warden, elder guardian, chicken jockey).",
+  "lightning_text.configuration.enableBossTitle.tooltip": "Show a big banner the first time you see a boss (For example: ender dragon, wither, c:bosses tag, warden, elder guardian, chicken jockey).",
   "lightning_text.configuration.enableTitleSound": "Thunder sound",
-  "lightning_text.configuration.enableTitleSound.tooltip": "Play entity.lightning_bolt.thunder (pitch 0) together with day, biome and boss banners.",
+  "lightning_text.configuration.enableTitleSound.tooltip": "Play thunder sound together with day, biome and boss banners.",
   "lightning_text.configuration.fontPath": "Font file",
   "lightning_text.configuration.fontPath.tooltip": "TrueType font used for the banners. Empty = auto-detect SimHei / a system CJK font.",
   "lightning_text.configuration.titleScale": "Title scale",
   "lightning_text.configuration.titleScale.tooltip": "Multiplier for the maximum banner size.",
+  "lightning_text.configuration.enableTitleShadow": "Title shadow",
+  "lightning_text.configuration.enableTitleShadow.tooltip": "Whether to display the text shadow.",
   "lightning_text.configuration.biomeDetectDelay": "Biome detect delay",
   "lightning_text.configuration.biomeDetectDelay.tooltip": "Ticks to stay in a biome before its banner is shown."
 }
