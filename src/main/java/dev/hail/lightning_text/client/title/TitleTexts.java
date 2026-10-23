@@ -2,6 +2,8 @@ package dev.hail.lightning_text.client.title;
 
 import dev.hail.lightning_text.LightningText;
 import java.util.Locale;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -44,7 +46,8 @@ public final class TitleTexts {
 
     /** Localised biome name, with a readable fallback for biomes that ship without a translation. */
     public static Component biomeName(ResourceLocation biome) {
-        return Component.translatableWithFallback(biome.toLanguageKey("biome"), beautify(biome.getPath()));
+        String name = Component.translatableWithFallback(biome.toLanguageKey("biome"), beautify(biome.getPath())).getString().toUpperCase();
+        return Component.literal(name);
     }
 
     /**
@@ -81,7 +84,8 @@ public final class TitleTexts {
         MutableComponent part = Component.literal(run.toString());
         if (galactic) {
             part.setStyle(Style.EMPTY.withFont(GALACTIC_FONT));
-        }
+        } else if (run.toString().equals("_") || run.toString().equals(":"))
+            part = Component.literal(" ");
         target.append(part);
     }
 
@@ -100,9 +104,9 @@ public final class TitleTexts {
             if (!builder.isEmpty()) {
                 builder.append(' ');
             }
-            builder.append(Character.toUpperCase(word.charAt(0)));
+            word = word.toUpperCase();
             if (word.length() > 1) {
-                builder.append(word, 1, word.length());
+                builder.append(word, 0, word.length());
             }
         }
         return builder.isEmpty() ? path : builder.toString();

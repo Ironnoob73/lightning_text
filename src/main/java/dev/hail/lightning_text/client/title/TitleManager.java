@@ -6,9 +6,9 @@ import java.util.Deque;
 import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 /**
@@ -170,8 +170,7 @@ public final class TitleManager {
             return;
         }
         // Pitch 0 (Minecraft clamps it to 0.5) gives the low, drawn out rumble used for these banners.
-        level.playLocalSound(minecraft.player.getX(), minecraft.player.getY(), minecraft.player.getZ(),
-                SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 1.0F, 0.0F, false);
+        minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.LIGHTNING_BOLT_THUNDER, 0.0F, 1.0F));
     }
 
     // ------------------------------------------------------------------ command titles

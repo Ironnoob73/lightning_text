@@ -14,6 +14,10 @@
   "lightning_text.boss.chicken_jockey": "Chicken Jockey",
 
   "lightning_text.configuration.title": "Lightning Text",
+  "lightning_text.configuration.useVanillaFont": "Use Vanilla Font",
+  "lightning_text.configuration.useVanillaFont.tooltip": "Do not use system font.",
+  "lightning_text.configuration.enableTitleShadow": "Title shadow",
+  "lightning_text.configuration.enableTitleShadow.tooltip": "Whether to display the text shadow.",
   "lightning_text.configuration.section.lightning.text.client.toml": "Lightning Text",
   "lightning_text.configuration.section.lightning.text.client.toml.title": "Lightning Text",
   "lightning_text.configuration.enableDayTitle": "Day banners",
@@ -28,8 +32,6 @@
   "lightning_text.configuration.fontPath.tooltip": "TrueType font used for the banners. Empty = auto-detect SimHei / a system CJK font.",
   "lightning_text.configuration.titleScale": "Title scale",
   "lightning_text.configuration.titleScale.tooltip": "Multiplier for the maximum banner size.",
-  "lightning_text.configuration.enableTitleShadow": "Title shadow",
-  "lightning_text.configuration.enableTitleShadow.tooltip": "Whether to display the text shadow.",
   "lightning_text.configuration.biomeDetectDelay": "Biome detect delay",
   "lightning_text.configuration.biomeDetectDelay.tooltip": "Ticks to stay in a biome before its banner is shown."
 }

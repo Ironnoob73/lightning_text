@@ -14,6 +14,10 @@
   "lightning_text.boss.chicken_jockey": "鸡骑士",
 
   "lightning_text.configuration.title": "雷霆大字",
+  "lightning_text.configuration.useVanillaFont": "使用原版字体",
+  "lightning_text.configuration.useVanillaFont.tooltip": "不使用系统字体。",
+  "lightning_text.configuration.enableTitleShadow": "标题阴影",
+  "lightning_text.configuration.enableTitleShadow.tooltip": "是否显示文字阴影。",
   "lightning_text.configuration.section.lightning.text.client.toml": "雷霆大字",
   "lightning_text.configuration.section.lightning.text.client.toml.title": "雷霆大字",
   "lightning_text.configuration.enableDayTitle": "天数标题",
@@ -28,8 +32,6 @@
   "lightning_text.configuration.fontPath.tooltip": "标题使用的 TrueType 字体。留空则自动寻找黑体（SimHei）等系统字体。",
   "lightning_text.configuration.titleScale": "标题大小倍率",
   "lightning_text.configuration.titleScale.tooltip": "标题最大尺寸的倍率。",
-  "lightning_text.configuration.enableTitleShadow": "标题阴影",
-  "lightning_text.configuration.enableTitleShadow.tooltip": "是否显示文字阴影。",
   "lightning_text.configuration.biomeDetectDelay": "生物群系延迟",
   "lightning_text.configuration.biomeDetectDelay.tooltip": "进入生物群系后停留多少刻才显示标题。"
 }

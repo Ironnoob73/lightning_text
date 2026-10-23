@@ -99,7 +99,7 @@ public final class SystemFontManager {
         if (unavailable) {
             return null;
         }
-        int effectiveOversample = Math.max(1, Math.min(oversample, 4));
+        int effectiveOversample = Math.clamp(oversample, 1, 4);
         while (effectiveOversample > 1 && size * effectiveOversample > MAX_GLYPH_PIXELS) {
             effectiveOversample--;
         }

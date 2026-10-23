@@ -9,6 +9,14 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class LTConfig {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
+    public static final ModConfigSpec.BooleanValue USE_VANILLA_FONT = BUILDER
+            .comment("Do not use system font.")
+            .define("useVanillaFont", false);
+
+    public static final ModConfigSpec.BooleanValue ENABLE_TITLE_SHADOW = BUILDER
+            .comment("Whether to display the text shadow.")
+            .define("enableTitleShadow", false);
+
     public static final ModConfigSpec.BooleanValue ENABLE_DAY_TITLE = BUILDER
             .comment("Show the big day banner (\"第X天\" / \"DAY X\") whenever a new in-game day begins.")
             .define("enableDayTitle", true);
@@ -39,10 +47,6 @@ public final class LTConfig {
                     "Banners still shrink automatically when the text would not fit on screen.")
             .defineInRange("titleScale", 2.5D, 0.25D, 3.0D);
 
-    public static final ModConfigSpec.BooleanValue ENABLE_TITLE_SHADOW = BUILDER
-            .comment("Whether to display the text shadow.")
-            .define("enableTitleShadow", false);
-
     public static final ModConfigSpec.IntValue BIOME_DETECT_DELAY = BUILDER
             .comment("Ticks the player has to stay inside a biome before its banner is shown.",
                     "Prevents banners from flickering while walking along biome borders.")
@@ -51,6 +55,13 @@ public final class LTConfig {
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private LTConfig() {
+    }
+    public static boolean useVanillaFont() {
+        return read(USE_VANILLA_FONT, true);
+    }
+
+    public static boolean titleShadowEnabled() {
+        return read(ENABLE_TITLE_SHADOW, true);
     }
 
     public static boolean dayTitleEnabled() {
@@ -75,10 +86,6 @@ public final class LTConfig {
 
     public static double titleScale() {
         return read(TITLE_SCALE, 2.5D);
-    }
-
-    public static boolean titleShadowEnabled() {
-        return read(ENABLE_TITLE_SHADOW, true);
     }
 
     public static int biomeDetectDelay() {

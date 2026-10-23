@@ -88,11 +88,11 @@ public final class TitleRenderer {
         float subtitleCenterY = centerY;
         if (main != null) {
             drawMain(graphics, main, width, centerY, color, shadowColor);
-            subtitleCenterY = centerY + main.halfHeight() + main.size() * 0.32F;
+            subtitleCenterY = centerY + main.halfHeight() + main.size() * 0.15F;
         } else if (entry.main() != null) {
             // No usable system font: keep the vanilla proportions instead of showing nothing.
-            drawVanillaScaled(graphics, vanillaFont, entry.main(), width * 0.5F, centerY, 4.0F, color);
-            subtitleCenterY = centerY + 36.0F;
+            drawVanillaScaled(graphics, vanillaFont, entry.main(), width * 0.5F, centerY, maxWidth, 4.0F, color);
+            subtitleCenterY = centerY + oversample + height * (float) LTConfig.titleScale() * 0.1F;
         }
 
         Component subtitle = entry.sub();
@@ -104,7 +104,7 @@ public final class TitleRenderer {
         } else if (main != null) {
             drawSystemSubtitle(graphics, subtitle, width, subtitleCenterY, oversample, color, shadowColor, main);
         } else {
-            drawVanillaScaled(graphics, vanillaFont, subtitle, width * 0.5F, subtitleCenterY, 1.0F, color);
+            drawVanillaScaled(graphics, vanillaFont, subtitle, width * 0.5F, subtitleCenterY, maxWidth, 1.0F, color);
         }
     }
 
@@ -114,7 +114,7 @@ public final class TitleRenderer {
     private static MainLayout layoutMain(Component text, int screenHeight, float maxWidth, int oversample) {
         FormattedCharSequence sequence = text.getVisualOrderText();
         SystemFont reference = SystemFontManager.get(quantise(REFERENCE_SIZE), oversample);
-        if (reference == null) {
+        if (reference == null || LTConfig.useVanillaFont()) {
             return null;
         }
         // Width grows linearly with the rasterised pixel size, so one measurement is enough. Letter
@@ -132,7 +132,7 @@ public final class TitleRenderer {
         target = Mth.clamp(target, minSize, baseSize);
 
         SystemFont font = SystemFontManager.get(quantise(target), oversample);
-        if (font == null) {
+        if (font == null || LTConfig.useVanillaFont()) {
             return null;
         }
         float spacing = font.pixelSize() * LETTER_SPACING;
@@ -156,9 +156,9 @@ public final class TitleRenderer {
     private static void drawSystemSubtitle(GuiGraphics graphics, Component text, int screenWidth, float centerY,
             int oversample, int color, int shadowColor, MainLayout main) {
         FormattedCharSequence sequence = text.getVisualOrderText();
-        SystemFont font = SystemFontManager.get(quantise(Math.max(12.0F, main.size() * 0.1F)), oversample);
-        if (font == null) {
-            drawVanillaScaled(graphics, Minecraft.getInstance().font, text, screenWidth * 0.5F, centerY, 1.0F, color);
+        SystemFont font = SystemFontManager.get(quantise(Math.max(12.0F, main.size() * 0.1F * (float) LTConfig.titleScale())), oversample);
+        if (font == null || LTConfig.useVanillaFont()) {
+            drawVanillaScaled(graphics, Minecraft.getInstance().font, text, screenWidth * 0.5F, centerY, screenWidth,(float) LTConfig.titleScale(), color);
             return;
         }
         float spacing = font.pixelSize() * 0.01F;
@@ -175,7 +175,7 @@ public final class TitleRenderer {
     /** Subtitle in the Standard Galactic Alphabet, rendered with the vanilla bitmap font. */
     private static void drawGalactic(GuiGraphics graphics, Font vanillaFont, Component text, int screenWidth,
             float maxWidth, float centerY, @Nullable MainLayout main, int color) {
-        float mainSize = main != null ? main.size() : REFERENCE_SIZE;
+        float mainSize = main != null ? main.size() * 1.25F : REFERENCE_SIZE * (float) LTConfig.titleScale() * 2;
         // Snap to half steps so that the 8px glyphs stay evenly scaled instead of getting blurred
         // unevenly by a fractional factor.
         float scale = Math.max(1.0F, Math.round(mainSize * SGA_SIZE_FACTOR / VANILLA_GLYPH_HEIGHT * 2.0F) / 8.0F);
@@ -192,13 +192,18 @@ public final class TitleRenderer {
     }
 
     private static void drawVanillaScaled(GuiGraphics graphics, Font font, Component text, float centerX,
-            float centerY, float scale, int color) {
+            float centerY, float maxWidth, float scale, int color) {
         int textWidth = font.width(text);
+        int height = graphics.guiHeight();
+        float target = height * BASE_SIZE_FACTOR * (float) LTConfig.titleScale() * 0.1F * (scale / 4.0F);
+        if (textWidth * target > maxWidth)
+            target = maxWidth / textWidth;
+        target  = Math.max(target, scale);
         PoseStack pose = graphics.pose();
         pose.pushPose();
-        pose.translate(centerX - textWidth * scale * 0.5F, centerY - 4.0F * scale, 0.0F);
-        pose.scale(scale, scale, 1.0F);
-        graphics.drawString(font, text, 0, 0, color, true);
+        pose.translate(centerX - textWidth * target * 0.5F, centerY - 4.0F * target, 0.0F);
+        pose.scale(target, target, 1.0F);
+        graphics.drawString(font, text, 0, 0, color, LTConfig.titleShadowEnabled());
         pose.popPose();
     }
 
