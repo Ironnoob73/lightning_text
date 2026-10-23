@@ -15,12 +15,12 @@ displayName="${mod_name}" #mandatory
 
 authors="LD_Anvil"
 
+logoFile = "icon.png"
+
 description='''
-Client side region banners in the style of Wuthering Waves / Arknights: Endfield.
-Replaces the vanilla /title display with an oversized banner drawn with a system font (SimHei / 黑体 by default),
-and adds a "new day" banner (day number + in-game clock) and a "first time in this biome" banner
-(localized biome name + its registry name in the Standard Galactic Alphabet).
-Every feature can be toggled in the client config.
+Adjusts the visual appearance of the Vanilla "/title" command, using system fonts to render the text.
+Also provides additional features such as Day Counter and Biome Display.
+The visual presentation draws inspiration from §oControl§r and §oArknights: Endfield§r.
 '''
 
 [[mixins]]

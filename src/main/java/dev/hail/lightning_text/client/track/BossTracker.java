@@ -92,6 +92,7 @@ public final class BossTracker {
                 continue;
             }
             LightningText.LOGGER.debug("Boss banner for {} (visible from {})", id, cameraPos);
+            displayName = Component.literal(displayName.getString().toUpperCase());
             TitleManager.showBoss(displayName, TitleTexts.galactic(id.toString()));
             return;
         }
