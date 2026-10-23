@@ -15,19 +15,21 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
  * Holds the single banner that is currently on screen plus a small queue of pending banners.
  *
  * <p>Command titles (vanilla {@code /title}) take priority: they cancel anything that is queued and
- * are shown immediately. Day / biome banners are queued so that two events firing in the same tick
- * (for example dawn while crossing a biome border) are shown one after another instead of
- * overwriting each other.
+ * are shown immediately. Day / biome / structure / dimension banners are queued so that two events
+ * firing in the same tick (for example dawn while crossing a biome border) are shown one after
+ * another instead of overwriting each other.
  */
 public final class TitleManager {
-    /** Vanilla keeps 70 ticks of "stay" time by default, day/biome banners use that value as-is. */
+    /** Vanilla keeps 70 ticks of "stay" time by default, automated banners use that value as-is. */
     public static final int DEFAULT_STAY_TICKS = 70;
-    private static final int MAX_QUEUE = 4;
+    private static final int MAX_QUEUE = 6;
 
     public enum Kind {
         COMMAND,
         DAY,
         BIOME,
+        STRUCTURE,
+        DIMENSION,
         BOSS
     }
 
@@ -236,6 +238,22 @@ public final class TitleManager {
             return;
         }
         enqueue(new Entry(biomeName, galacticName, SubtitleStyle.GALACTIC, 0, DEFAULT_STAY_TICKS, 0, Kind.BIOME));
+    }
+
+    /** First time the player enters a structure; same layout as the biome banner. */
+    public static void showStructure(Component structureName, Component galacticName) {
+        if (!LTConfig.structureTitleEnabled()) {
+            return;
+        }
+        enqueue(new Entry(structureName, galacticName, SubtitleStyle.GALACTIC, 0, DEFAULT_STAY_TICKS, 0, Kind.STRUCTURE));
+    }
+
+    /** First time the player enters a dimension in this world/server; same layout as the biome banner. */
+    public static void showDimension(Component dimensionName, Component galacticName) {
+        if (!LTConfig.dimensionTitleEnabled()) {
+            return;
+        }
+        enqueue(new Entry(dimensionName, galacticName, SubtitleStyle.GALACTIC, 0, DEFAULT_STAY_TICKS, 0, Kind.DIMENSION));
     }
 
     /** First fight against a boss type mob; same layout as the biome banner. */

@@ -25,6 +25,17 @@ public final class LTConfig {
             .comment("Show the big banner the first time the player enters a biome.")
             .define("enableBiomeTitle", true);
 
+    public static final ModConfigSpec.BooleanValue ENABLE_STRUCTURE_TITLE = BUILDER
+            .comment("Show the big banner the first time the player enters a structure.",
+                    "Singleplayer reads the integrated server directly. On remote servers this needs",
+                    "Servux on the server, which sends the structure data to the client.")
+            .define("enableStructureTitle", true);
+
+    public static final ModConfigSpec.BooleanValue ENABLE_DIMENSION_TITLE = BUILDER
+            .comment("Show the big banner the first time the player enters a dimension in the current world/server.",
+                    "Disabled by default.")
+            .define("enableDimensionTitle", false);
+
     public static final ModConfigSpec.BooleanValue ENABLE_BOSS_TITLE = BUILDER
             .comment("Show the big banner the first time the player sees a boss type mob.",
                     "Seeing means the mob is on screen and not hidden behind blocks; no attack is needed.",
@@ -33,7 +44,7 @@ public final class LTConfig {
             .define("enableBossTitle", true);
 
     public static final ModConfigSpec.BooleanValue ENABLE_TITLE_SOUND = BUILDER
-            .comment("Play minecraft:entity.lightning_bolt.thunder (pitch 0) when a day, biome or boss banner appears.",
+            .comment("Play minecraft:entity.lightning_bolt.thunder (pitch 0) when a day, biome, structure, dimension or boss banner appears.",
                     "Command titles never play a sound.")
             .define("enableTitleSound", true);
 
@@ -70,6 +81,14 @@ public final class LTConfig {
 
     public static boolean biomeTitleEnabled() {
         return read(ENABLE_BIOME_TITLE, true);
+    }
+
+    public static boolean structureTitleEnabled() {
+        return read(ENABLE_STRUCTURE_TITLE, true);
+    }
+
+    public static boolean dimensionTitleEnabled() {
+        return read(ENABLE_DIMENSION_TITLE, false);
     }
 
     public static boolean bossTitleEnabled() {

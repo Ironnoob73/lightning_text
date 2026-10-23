@@ -19,6 +19,13 @@ sourceSets.main.resources {
 }
 
 repositories {
+    maven {
+        name 'Curseforge Maven'
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 base {
@@ -76,6 +83,7 @@ configurations {
 }
 
 dependencies {
+    implementation "curse.maven:servux-406323:8383414"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

@@ -7,6 +7,8 @@
 
 Adjusts the visual appearance of the Vanilla `/title` command, using system fonts to render the text.
 
-Also provides additional features such as Day Counter and Biome Display.
+Also provides additional features such as Day Counter, Biome, Structure and Dimension Display.
+
+On multiplayer servers, structure banners require the optional server-side [Servux](https://github.com/maruohon/servux) mod; singleplayer works without it.
 
 The visual presentation draws inspiration from *Control* and *Arknights: Endfield*.

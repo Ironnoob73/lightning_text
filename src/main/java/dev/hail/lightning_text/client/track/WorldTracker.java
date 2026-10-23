@@ -18,11 +18,13 @@ import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 /**
- * Watches the client world for "a new day started" and "a biome was entered for the first time".
- * Entirely client side: it only reads the synced day time and the biome holder at the player's
- * position, nothing is ever sent to the server.
+ * Watches the client world for "a new day started", "a biome was entered for the first time" and
+ * "a dimension was entered for the first time". Entirely client side: it only reads the synced day
+ * time, the biome holder at the player's position and the dimension key, nothing is ever sent to
+ * the server.
  *
- * <p>The set of already visited biomes is persisted per world / server by {@link VisitedStore}.
+ * <p>The set of already visited biomes / dimensions is persisted per world / server by
+ * {@link VisitedStore}.
  */
 public final class WorldTracker {
     private static final long TICKS_PER_DAY = 24000L;
@@ -64,6 +66,23 @@ public final class WorldTracker {
         pendingTicks = 0;
         // The key stays the same when only the dimension changed, so nothing is reloaded then.
         VisitedStore.open(minecraft);
+        announceDimension(level);
+    }
+
+    /**
+     * Shows the dimension banner the first time this dimension is visited in the current world/server.
+     * Called for every level change, so joining a world counts as entering its initial dimension.
+     */
+    private static void announceDimension(ClientLevel level) {
+        if (!LTConfig.dimensionTitleEnabled()) {
+            // Disabled features record nothing, so enabling them later still works.
+            return;
+        }
+        ResourceLocation dimension = level.dimension().location();
+        if (!VisitedStore.markDimension(dimension)) {
+            return;
+        }
+        TitleManager.showDimension(TitleTexts.dimensionName(dimension), TitleTexts.galactic(dimension.toString()));
     }
 
     private static void reset() {

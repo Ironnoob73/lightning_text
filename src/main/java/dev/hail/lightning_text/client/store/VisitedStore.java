@@ -35,10 +35,12 @@ public final class VisitedStore {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String ROOT_FOLDER = "lightning_text";
     private static final String VISITED_FOLDER = "visited";
-    private static final int FORMAT_VERSION = 1;
+    private static final int FORMAT_VERSION = 2;
     private static final int MAX_FILE_NAME = 96;
 
     private static final Set<ResourceLocation> BIOMES = new LinkedHashSet<>();
+    private static final Set<ResourceLocation> STRUCTURES = new LinkedHashSet<>();
+    private static final Set<ResourceLocation> DIMENSIONS = new LinkedHashSet<>();
     private static final Set<ResourceLocation> BOSSES = new LinkedHashSet<>();
 
     @Nullable
@@ -72,6 +74,8 @@ public final class VisitedStore {
         key = null;
         file = null;
         BIOMES.clear();
+        STRUCTURES.clear();
+        DIMENSIONS.clear();
         BOSSES.clear();
         dirty = false;
     }
@@ -81,6 +85,30 @@ public final class VisitedStore {
      */
     public static boolean markBiome(ResourceLocation biome) {
         if (key == null || !BIOMES.add(biome)) {
+            return false;
+        }
+        dirty = true;
+        save();
+        return true;
+    }
+
+    /**
+     * @return {@code true} when this structure had never been entered in this world/server before.
+     */
+    public static boolean markStructure(ResourceLocation structure) {
+        if (key == null || !STRUCTURES.add(structure)) {
+            return false;
+        }
+        dirty = true;
+        save();
+        return true;
+    }
+
+    /**
+     * @return {@code true} when this dimension had never been entered in this world/server before.
+     */
+    public static boolean markDimension(ResourceLocation dimension) {
+        if (key == null || !DIMENSIONS.add(dimension)) {
             return false;
         }
         dirty = true;
@@ -144,6 +172,8 @@ public final class VisitedStore {
 
     private static void load() {
         BIOMES.clear();
+        STRUCTURES.clear();
+        DIMENSIONS.clear();
         BOSSES.clear();
         dirty = false;
         if (file == null || !Files.isRegularFile(file)) {
@@ -156,6 +186,8 @@ public final class VisitedStore {
                 return;
             }
             readIds(data.biomes, BIOMES);
+            readIds(data.structures, STRUCTURES);
+            readIds(data.dimensions, DIMENSIONS);
             readIds(data.bosses, BOSSES);
         } catch (Exception exception) {
             LightningText.LOGGER.warn("Failed to read the visit record {}, starting a new one", file, exception);
@@ -187,6 +219,8 @@ public final class VisitedStore {
             data.format = FORMAT_VERSION;
             data.key = key;
             data.biomes = toStrings(BIOMES);
+            data.structures = toStrings(STRUCTURES);
+            data.dimensions = toStrings(DIMENSIONS);
             data.bosses = toStrings(BOSSES);
             Path temporary = file.resolveSibling(file.getFileName() + ".tmp");
             Files.writeString(temporary, GSON.toJson(data), StandardCharsets.UTF_8);
@@ -216,6 +250,10 @@ public final class VisitedStore {
         private String key;
         @Nullable
         private List<String> biomes;
+        @Nullable
+        private List<String> structures;
+        @Nullable
+        private List<String> dimensions;
         @Nullable
         private List<String> bosses;
     }

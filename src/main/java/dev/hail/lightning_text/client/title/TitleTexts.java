@@ -46,7 +46,25 @@ public final class TitleTexts {
 
     /** Localised biome name, with a readable fallback for biomes that ship without a translation. */
     public static Component biomeName(ResourceLocation biome) {
-        String name = Component.translatableWithFallback(biome.toLanguageKey("biome"), beautify(biome.getPath())).getString().toUpperCase();
+        return registryName(biome, "biome");
+    }
+
+    /** Localised structure name, with a readable fallback for structures that ship without a translation. */
+    public static Component structureName(ResourceLocation structure) {
+        return registryName(structure, "structure");
+    }
+
+    /** Localised dimension name, with a readable fallback for dimensions that ship without a translation. */
+    public static Component dimensionName(ResourceLocation dimension) {
+        return registryName(dimension, "dimension");
+    }
+
+    /**
+     * Looks up {@code <type>.<namespace>.<path>} (for example {@code structure.minecraft.village}) and
+     * falls back to a beautified path. The result is uppercased like the other banners.
+     */
+    private static Component registryName(ResourceLocation id, String type) {
+        String name = Component.translatableWithFallback(id.toLanguageKey(type), beautify(id.getPath())).getString().toUpperCase();
         return Component.literal(name);
     }
 

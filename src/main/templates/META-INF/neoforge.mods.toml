@@ -19,7 +19,8 @@ logoFile = "logo.png"
 
 description='''
 Adjusts the visual appearance of the Vanilla "/title" command, using system fonts to render the text.
-Also provides additional features such as Day Counter and Biome Display.
+Also provides additional features such as Day Counter, Biome, Structure and Dimension Display.
+On multiplayer servers, structure display requires the optional server-side Servux mod.
 The visual presentation draws inspiration from §oControl§r and §oArknights: Endfield§r.
 '''
 

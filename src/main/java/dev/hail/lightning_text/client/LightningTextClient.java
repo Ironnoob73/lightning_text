@@ -2,8 +2,10 @@ package dev.hail.lightning_text.client;
 
 import dev.hail.lightning_text.client.config.LTConfig;
 import dev.hail.lightning_text.client.font.SystemFontManager;
+import dev.hail.lightning_text.client.servux.ServuxStructures;
 import dev.hail.lightning_text.client.title.TitleManager;
 import dev.hail.lightning_text.client.track.BossTracker;
+import dev.hail.lightning_text.client.track.StructureTracker;
 import dev.hail.lightning_text.client.track.WorldTracker;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
@@ -23,6 +25,9 @@ public final class LightningTextClient {
         modContainer.registerConfig(ModConfig.Type.CLIENT, LTConfig.SPEC);
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 
+        // Optional Servux support: the channel is only used when the server advertises it.
+        modEventBus.addListener(ServuxStructures::onRegisterPayloads);
+
         // Read the system font while the loading screen is still up instead of when the first banner
         // appears. Purely file IO, no OpenGL involved.
         SystemFontManager.preload();
@@ -30,6 +35,7 @@ public final class LightningTextClient {
         // Game bus listeners (client ticks).
         NeoForge.EVENT_BUS.addListener(TitleManager::onClientTick);
         NeoForge.EVENT_BUS.addListener(WorldTracker::onClientTick);
+        NeoForge.EVENT_BUS.addListener(StructureTracker::onClientTick);
         NeoForge.EVENT_BUS.addListener(BossTracker::onClientTick);
     }
 }
