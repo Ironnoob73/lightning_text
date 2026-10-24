@@ -83,7 +83,7 @@ configurations {
 }
 
 dependencies {
-    implementation "curse.maven:servux-406323:8383414"
+    implementation "curse.maven:servuxforged-1013154:6359084"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
