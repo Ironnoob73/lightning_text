@@ -62,7 +62,7 @@ public final class StructureTracker {
             resetQuery();
             return;
         }
-        if (ServuxStructures.isActive()) {
+        if (ServuxStructures.hasData()) {
             resetQuery();
             ResourceLocation structure = ServuxStructures.structureAt(player.blockPosition());
             if (structure != null) {
@@ -110,6 +110,7 @@ public final class StructureTracker {
         if (!VisitedStore.markStructure(structure)) {
             return;
         }
+        LightningText.LOGGER.debug("Structure banner for {}", structure);
         TitleManager.showStructure(TitleTexts.structureName(structure), TitleTexts.galactic(structure.toString()));
     }
 

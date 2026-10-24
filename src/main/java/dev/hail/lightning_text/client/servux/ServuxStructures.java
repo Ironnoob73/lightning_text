@@ -4,6 +4,7 @@ import dev.hail.lightning_text.LightningText;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -22,11 +23,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.payload.MinecraftRegisterPayload;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 /**
  * Optional integration with <a href="https://github.com/maruohon/servux">Servux</a>.
@@ -49,6 +52,18 @@ import net.neoforged.neoforge.network.registration.NetworkRegistry;
  */
 public final class ServuxStructures {
     public static final ResourceLocation CHANNEL = ResourceLocation.fromNamespaceAndPath("servux", "structures");
+
+    /**
+     * ServuxForged sends its other providers' data to every player on join. Registering them as
+     * no-op payloads keeps a vanilla NeoForge client from warning about (or rejecting) them; only
+     * {@link #CHANNEL} is actually used for structure banners.
+     */
+    private static final List<ResourceLocation> IGNORED_CHANNELS = List.of(
+            ResourceLocation.fromNamespaceAndPath("servux", "hud_metadata"),
+            ResourceLocation.fromNamespaceAndPath("servux", "entity_data"),
+            ResourceLocation.fromNamespaceAndPath("servux", "litematics"),
+            ResourceLocation.fromNamespaceAndPath("servux", "tweaks"),
+            ResourceLocation.fromNamespaceAndPath("servux", "debug_service"));
 
     private static final int TYPE_METADATA = 1;
     private static final int TYPE_STRUCTURE_DATA = 2;
@@ -84,7 +99,32 @@ public final class ServuxStructures {
     // ------------------------------------------------------------------ registration + lifecycle
 
     public static void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
-        event.registrar("1").optional().playBidirectional(Payload.TYPE, Payload.CODEC, ServuxStructures::handlePayload);
+        if (hasLocalServuxForged()) {
+            // ServuxForged is a server-side mod and registers this channel itself. Registering it a
+            // second time on a client that also has the server mod would fail, and its 1.21.1 builds
+            // are not compatible with the client's custom payload encoder anyway.
+            LightningText.LOGGER.warn("ServuxForged is installed on the client; client-side Servux structure support is disabled. "
+                    + "Install ServuxForged on the server instead.");
+            return;
+        }
+        PayloadRegistrar registrar = event.registrar("1.0").optional();
+        registrar.playBidirectional(Payload.TYPE, Payload.CODEC, ServuxStructures::handlePayload);
+        for (ResourceLocation channel : IGNORED_CHANNELS) {
+            CustomPacketPayload.Type<IgnoredPayload> type = new CustomPacketPayload.Type<>(channel);
+            // Bidirectional: ServuxForged registers these channels in both directions, and NeoForge's
+            // channel negotiation requires the client's flow to match the server's registration.
+            registrar.playBidirectional(type, IgnoredPayload.codec(type), (payload, context) -> {
+            });
+        }
+    }
+
+    /** {@code true} when the local game instance contains ServuxForged (mod id {@code servux}). */
+    public static boolean hasLocalServuxForged() {
+        try {
+            return ModList.get() != null && ModList.get().isLoaded("servux");
+        } catch (RuntimeException exception) {
+            return false;
+        }
     }
 
     /**
@@ -94,7 +134,7 @@ public final class ServuxStructures {
      *                (singleplayer structure data comes straight from the integrated server instead).
      */
     public static void tick(Minecraft minecraft, @Nullable ClientLevel level, boolean enabled) {
-        if (!enabled) {
+        if (!enabled || hasLocalServuxForged()) {
             if (registered) {
                 send(minecraft, TYPE_UNREGISTER);
             }
@@ -125,9 +165,9 @@ public final class ServuxStructures {
         if ((tick & 0x3F) == 0) {
             expire();
         }
-        // Fabric's play channel registration happens after the configuration phase. NeoForge
-        // advertises play channels slightly differently, so send a plain minecraft:register with
-        // our channel once the play connection exists; Fabric servers then allow Servux to send.
+        // Fabric registers play channels after the configuration phase. ServuxForged uses the same
+        // Fabric networking stack through Sinytra's Forgified Fabric API even on a NeoForge server,
+        // so the play-phase minecraft:register advertisement is needed for both server types.
         if (!advertised) {
             advertised = advertiseChannel();
             advertiseDelay = advertised ? 2 : 0;
@@ -136,11 +176,15 @@ public final class ServuxStructures {
             advertiseDelay--;
         } else if (!registered && NetworkRegistry.hasChannel(currentConnection, CHANNEL)) {
             registered = send(minecraft, TYPE_REGISTER);
+            if (registered) {
+                LightningText.LOGGER.debug("Registered with Servux structures provider");
+            }
         }
     }
 
-    public static boolean isActive() {
-        return active;
+    /** {@code true} as soon as at least one structure bounding box has been received. */
+    public static boolean hasData() {
+        return !STRUCTURES.isEmpty();
     }
 
     /** @return the first known structure whose bounding box contains {@code pos}, or {@code null}. */
@@ -181,6 +225,7 @@ public final class ServuxStructures {
     private static boolean advertiseChannel() {
         try {
             PacketDistributor.sendToServer(new MinecraftRegisterPayload(Set.of(CHANNEL)));
+            LightningText.LOGGER.debug("Advertised Servux structures channel");
             return true;
         } catch (RuntimeException exception) {
             LightningText.LOGGER.warn("Failed to advertise the Servux structures channel", exception);
@@ -255,6 +300,7 @@ public final class ServuxStructures {
         // A new registration always starts a new data transfer.
         resetTransfer();
         active = true;
+        LightningText.LOGGER.debug("Servux structures metadata received (version {}, timeout {})", version, serverTimeoutTicks);
     }
 
     private static void handleStructureData(FriendlyByteBuf buffer) {
@@ -293,6 +339,7 @@ public final class ServuxStructures {
                 return;
             }
             ListTag structures = root.getList("Structures", Tag.TAG_COMPOUND);
+            int parsed = 0;
             for (int i = 0; i < structures.size(); i++) {
                 CompoundTag start = structures.getCompound(i);
                 String rawId = start.getString("id");
@@ -309,6 +356,13 @@ public final class ServuxStructures {
                 }
                 StructureKey key = new StructureKey(id, start.getInt("ChunkX"), start.getInt("ChunkZ"));
                 STRUCTURES.put(key, new StructureEntry(box, tick));
+                parsed++;
+            }
+            LightningText.LOGGER.debug("Servux structures: {} of {} entries parsed, {} boxes cached",
+                    parsed, structures.size(), STRUCTURES.size());
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.player != null) {
+                LightningText.LOGGER.debug("Servux structures: player is inside {}", structureAt(minecraft.player.blockPosition()));
             }
         } catch (RuntimeException exception) {
             LightningText.LOGGER.warn("Failed to parse Servux structure data", exception);
@@ -369,6 +423,19 @@ public final class ServuxStructures {
         @Override
         public CustomPacketPayload.Type<Payload> type() {
             return TYPE;
+        }
+    }
+
+    /** Raw payload for Servux providers whose data this mod does not use. */
+    public record IgnoredPayload(CustomPacketPayload.Type<IgnoredPayload> type, byte[] data) implements CustomPacketPayload {
+        public static StreamCodec<FriendlyByteBuf, IgnoredPayload> codec(CustomPacketPayload.Type<IgnoredPayload> type) {
+            return StreamCodec.of(
+                    (buffer, payload) -> buffer.writeBytes(payload.data()),
+                    buffer -> {
+                        byte[] data = new byte[buffer.readableBytes()];
+                        buffer.readBytes(data);
+                        return new IgnoredPayload(type, data);
+                    });
         }
     }
 }

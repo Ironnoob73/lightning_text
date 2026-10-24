@@ -80,10 +80,25 @@ neoForge {
 
 configurations {
     runtimeClasspath.extendsFrom localRuntime
+    serverOnlyRuntime
 }
 
 dependencies {
-    implementation "curse.maven:servuxforged-1013154:6359084"
+    // ServuxForged is a server-side mod. Keep it off the client runtime classpath: loading it in
+    // singleplayer makes the integrated server send its Fabric-networking payloads, which fails in
+    // NeoForge's custom payload encoder before this client mod is involved.
+    compileOnly "curse.maven:servuxforged-1013154:6359084"
+
+    // Dev server only. ServuxForged 0.2.2 starts on NeoForge 21.1.262, but its bundled Forgified
+    // Fabric API 4.3.0 registers a dummy payload codec. The standalone Forgified API provides
+    // fabric-networking-api-v1 4.3.1, whose codec replacement handles NeoForge's extra return path.
+    // (ServuxForged 0.4.1 itself fails earlier on 21.1.262 with a MobEntity mixin error.)
+    serverOnlyRuntime "curse.maven:servuxforged-1013154:6359084"
+    implementation "curse.maven:forgified-fabric-api-889079:9195559"
+}
+
+tasks.named('runServer', JavaExec) {
+    classpath += configurations.serverOnlyRuntime
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

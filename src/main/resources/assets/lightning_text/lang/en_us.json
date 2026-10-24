@@ -64,7 +64,7 @@
   "lightning_text.configuration.enableBiomeTitle": "Biome banners",
   "lightning_text.configuration.enableBiomeTitle.tooltip": "Show a big banner the first time you enter a biome.",
   "lightning_text.configuration.enableStructureTitle": "Structure banners",
-  "lightning_text.configuration.enableStructureTitle.tooltip": "Show a big banner the first time you enter a structure (singleplayer reads the save directly; on multiplayer servers the server needs Servux installed).",
+  "lightning_text.configuration.enableStructureTitle.tooltip": "Show a big banner the first time you enter a structure (singleplayer reads the save directly; on multiplayer servers the server needs ServuxForged or Servux, the client needs neither).",
   "lightning_text.configuration.enableDimensionTitle": "Dimension banners",
   "lightning_text.configuration.enableDimensionTitle.tooltip": "Show a big banner the first time you enter a dimension in a world. Disabled by default.",
   "lightning_text.configuration.enableBossTitle": "Boss banners",

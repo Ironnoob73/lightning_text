@@ -28,7 +28,7 @@ public final class LTConfig {
     public static final ModConfigSpec.BooleanValue ENABLE_STRUCTURE_TITLE = BUILDER
             .comment("Show the big banner the first time the player enters a structure.",
                     "Singleplayer reads the integrated server directly. On remote servers this needs",
-                    "Servux on the server, which sends the structure data to the client.")
+                    "Servux on the server (or ServuxForged on a NeoForge server); the client needs neither.")
             .define("enableStructureTitle", true);
 
     public static final ModConfigSpec.BooleanValue ENABLE_DIMENSION_TITLE = BUILDER
