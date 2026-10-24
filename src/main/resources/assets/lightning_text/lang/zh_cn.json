@@ -66,7 +66,7 @@
   "lightning_text.configuration.enableStructureTitle": "结构标题",
   "lightning_text.configuration.enableStructureTitle.tooltip": "第一次进入某个结构时显示大标题（单人游戏直接读取存档；多人服务器需要服务端安装 ServuxForged 或 Servux，客户端无需安装）。",
   "lightning_text.configuration.enableDimensionTitle": "维度标题",
-  "lightning_text.configuration.enableDimensionTitle.tooltip": "每个世界第一次进入某个维度时显示大标题。默认关闭。",
+  "lightning_text.configuration.enableDimensionTitle.tooltip": "第一次进入某个维度时显示大标题。由于大多数维度具有各自独特的生物群系，该项默认关闭。",
   "lightning_text.configuration.enableBossTitle": "Boss 标题",
   "lightning_text.configuration.enableBossTitle.tooltip": "第一次在屏幕上看到 Boss 类生物时显示大标题（如末影龙、凋灵、c:bosses 标签内的生物，以及监守者、远古守卫者、鸡骑士）。",
   "lightning_text.configuration.enableTitleSound": "雷霆音效",

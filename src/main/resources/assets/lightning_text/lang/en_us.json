@@ -66,7 +66,7 @@
   "lightning_text.configuration.enableStructureTitle": "Structure banners",
   "lightning_text.configuration.enableStructureTitle.tooltip": "Show a big banner the first time you enter a structure (singleplayer reads the save directly; on multiplayer servers the server needs ServuxForged or Servux, the client needs neither).",
   "lightning_text.configuration.enableDimensionTitle": "Dimension banners",
-  "lightning_text.configuration.enableDimensionTitle.tooltip": "Show a big banner the first time you enter a dimension in a world. Disabled by default.",
+  "lightning_text.configuration.enableDimensionTitle.tooltip": "Show a big banner the first time you enter a dimension. Since most dimensions feature their own unique biomes, this is disabled by default.",
   "lightning_text.configuration.enableBossTitle": "Boss banners",
   "lightning_text.configuration.enableBossTitle.tooltip": "Show a big banner the first time you see a boss (For example: ender dragon, wither, c:bosses tag, warden, elder guardian, chicken jockey).",
   "lightning_text.configuration.enableTitleSound": "Thunder sound",
